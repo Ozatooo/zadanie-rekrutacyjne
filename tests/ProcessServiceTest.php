@@ -2,6 +2,7 @@
 
 namespace App\Tests\Service;
 
+use App\Helper\ProcessFailureHelper;
 use App\Service\ProcessService;
 use PHPUnit\Framework\TestCase;
 use DateTimeImmutable;
@@ -53,12 +54,8 @@ class ProcessServiceTest extends TestCase
 
     public function testDeterminePriority()
     {
-        $reflection = new \ReflectionClass($this->processService);
-        $method = $reflection->getMethod('determinePriority');
-        $method->setAccessible(true);
-
-        $this->assertEquals('krytyczny', $method->invoke($this->processService, 'To jest bardzo pilne zgłoszenie!'));
-        $this->assertEquals('wysoki', $method->invoke($this->processService, 'To jest pilne zgłoszenie!'));
-        $this->assertEquals('normalny', $method->invoke($this->processService, 'Zgłoszenie standardowe'));
+        $this->assertEquals('krytyczny', ProcessFailureHelper::determinePriority('To jest bardzo pilne zgłoszenie!'));
+        $this->assertEquals('wysoki', ProcessFailureHelper::determinePriority('To jest pilne zgłoszenie!'));
+        $this->assertEquals('normalny', ProcessFailureHelper::determinePriority('Zgłoszenie standardowe'));
     }
 }
