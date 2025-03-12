@@ -42,6 +42,8 @@ class ProcessServiceReportsCommand extends Command
         $filesystem = new Filesystem();
 
         $inputFile = $input->getArgument('inputFile');
+        $this->logger->info('Starting file processing', ['fileName' => $inputFile]);
+
         if (!$filesystem->exists($inputFile)) {
             $this->errorService->logErrorWithFile('fileDoNotExist', $inputFile, $io, $this->logger);
             return Command::FAILURE;
@@ -54,11 +56,13 @@ class ProcessServiceReportsCommand extends Command
             $this->errorService->logErrorWithFile('jsonParsingError', $inputFile, $io, $this->logger);
             return Command::FAILURE;
         }
+        $this->logger->info('Successfully Getting input file data', $data);
 
         $invalidEntries = [];
         $seenDescriptions = [];
         $reports = [];
         foreach ($data as $entry) {
+            $this->logger->info('Starting entry processing', $entry);
             if (!isset($entry['description'])) {
                 $this->errorService->logError('noDescription', $entry, $io, $this->logger);
                 $invalidEntries[] = $entry;
