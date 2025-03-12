@@ -90,12 +90,12 @@ class ProcessServiceReportsCommand extends Command
         $this->logger->info('Files saved: inspections.json, failures.json, invalid_entries.json');
         
         $io->success('Files saved: inspections.json, failures.json, invalid_entries.json');
-        $io->text([
-            "Number of messages processed: " . count($data),
-            "Number of inspections created: " . count($reports['inspections']),
-            "Number of failure reports: " . count($reports['failures']),
-            "Number of invalid entries (including duplicates): " . count($invalidEntries),
-        ]);
+        $io->success('Number of messages processed: ' . count($data));
+        $io->success('Number of inspections created: ' . count($reports['inspections']));
+        $io->success('Number of failure reports: ' . count($reports['failures']));
+        if(count($invalidEntries) > 0) {
+            $io->warning('Number of invalid entries (including duplicates): ' . count($invalidEntries));
+        }
 
         return Command::SUCCESS;
     }
